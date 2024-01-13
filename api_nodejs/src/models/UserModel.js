@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     password: {
-      type: Number,
+      type: String,
       required: true,
     },
     isAdmin: {
@@ -24,11 +24,12 @@ const userSchema = new mongoose.Schema(
     },
     access_token: {
       type: String,
-      required: true,
     },
     refresh_token: {
       type: String,
-      require: true,
+    },
+    isDelete: {
+      type: Boolean,
     },
   },
   {
