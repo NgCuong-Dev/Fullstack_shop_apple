@@ -14,9 +14,14 @@ import {
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import tiki from "../../assets/images/logo_tiki.png";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const HeaderComponent = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => {
+    return state.user;
+  });
+  console.log("user", user);
   const handleNavigateLogin = () => {
     navigate("/sign-in");
   };
