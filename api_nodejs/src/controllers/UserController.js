@@ -22,9 +22,11 @@ const getDetailsUser = async (req, res) => {
         message: "The userID is required",
       });
     }
+    // chay vao day ko thay ham getDetail-> nhay vao catch bao loi 404
     const response = await UserService.getDetailsUser(userId);
     return res.status(200).json(response);
   } catch (e) {
+    console.log(e);
     return res.status(404).json({
       message: e,
     });

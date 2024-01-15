@@ -11,7 +11,6 @@ import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { Col, Row } from "antd";
 import animateLogin from "../../assets/animate_pig.json";
 import Lottie from "lottie-react";
-import updateUser from "../../redux/slides/userSlide";
 import background_register from "../../assets/images/background_register.jpg";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +19,7 @@ import { useMutationHooks } from "../../hooks/useMultationHook";
 import { useDispatch } from "react-redux";
 import * as message from "../../components/Message/Message";
 import { jwtDecode } from "jwt-decode";
+import { updateUser } from "../../redux/slides/userSlide";
 // import Loading from "../../components/LoadingComponent/Loading";
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const SignInPage = () => {
       message.success("Login Successfull!");
       // handleNavigateHome();
       localStorage.setItem("access_token", data?.access_token);
-      // window.location.href = "/";
+      window.location.href = "/";
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
         console.log("decode", decoded);
@@ -68,7 +68,6 @@ const SignInPage = () => {
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
     dispatch(updateUser(res?.data));
-    console.log("res", res);
   };
 
   return (
