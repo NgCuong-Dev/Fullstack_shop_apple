@@ -1,14 +1,19 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const routes = require("./routes");
-const { default: mongoose } = require("mongoose");
+// const bodyCookie = require("body-cookie");
+const cors = require("cors");
 const bodyParser = require("body-parser");
+const { default: mongoose } = require("mongoose");
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 //middlewares
 app.use(bodyParser.json());
+app.use(cors());
+app.use(cookieParser());
 routes(app);
 
 //connect database Mongodb

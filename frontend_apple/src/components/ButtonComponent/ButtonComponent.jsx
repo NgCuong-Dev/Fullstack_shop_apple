@@ -10,12 +10,7 @@ const ButtonComponent = ({
   ...rest
 }) => {
   return (
-    <Button
-      size={size}
-      style={styleButton}
-      {...rest}
-      //   icon={<SearchOutlined />}
-    >
+    <Button size={size} style={styleButton} {...rest}>
       <span style={styleTextButton}> {textButton}</span>
     </Button>
   );

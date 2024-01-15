@@ -36,7 +36,7 @@ const ButtonInputSearch = (props) => {
         styleButton={{
           backgroundColor: backgroundColorButton,
           color: "#000000",
-          border: bordered ? "1px solid black" : "none", // Viền cho nút khi bordered là true, ngược lại không viền
+          border: bordered ? "1px solid black" : "none",
         }}
         styleTextButton={{ color: colorButton }}
         icon={

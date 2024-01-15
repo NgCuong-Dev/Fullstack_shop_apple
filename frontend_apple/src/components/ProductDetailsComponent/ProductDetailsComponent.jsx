@@ -189,7 +189,6 @@ const ProductDetailsComponent = () => {
         </div>
         <div className="space-x-2 flex justify-center items-center pt-6">
           <ButtonComponent
-            bordered={false}
             size={20}
             styleButton={{
               backgroundColor: "rgb(255,57,69)",

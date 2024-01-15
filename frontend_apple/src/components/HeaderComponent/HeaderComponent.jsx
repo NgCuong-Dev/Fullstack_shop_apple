@@ -13,9 +13,13 @@ import {
 } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import tiki from "../../assets/images/logo_tiki.png";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const HeaderComponent = () => {
+  const navigate = useNavigate();
+  const handleNavigateLogin = () => {
+    navigate("/sign-in");
+  };
   return (
     <div>
       <WrapperHeader>
@@ -33,7 +37,6 @@ const HeaderComponent = () => {
             size="large"
             textButton="Tìm Kiếm"
             placeholder="Bạn tìm gì hôm nay"
-            bordered={false}
           />
         </Col>
         <Col
@@ -42,14 +45,12 @@ const HeaderComponent = () => {
         >
           <WrapperHeaderAccount gutter={16}>
             <UserOutlined style={{ fontSize: "30px" }} />
-            <div>
-              <NavLink to={"/sign-in"}>
-                <WrapperTextHeaderSmall
-                  style={{ fontSize: "12px", color: "black" }}
-                >
-                  Đăng Nhập/Đăng Ký
-                </WrapperTextHeaderSmall>
-              </NavLink>
+            <div onClick={handleNavigateLogin} style={{ cursor: "pointer" }}>
+              <WrapperTextHeaderSmall
+                style={{ fontSize: "12px", color: "black" }}
+              >
+                Đăng Nhập/Đăng Ký
+              </WrapperTextHeaderSmall>
               <div>
                 <span style={{ fontSize: "12px" }}>Tài Khoản</span>
                 <CaretDownOutlined />

@@ -19,16 +19,16 @@ const getAllUser = () => {
   });
 };
 //lay thong tin user
-const getDetailsUser = (id) => {
+const getDetailsProduct = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const user = await User.findOne({
+      const productID = await Product.findOne({
         _id: id,
       });
-      if (user === null) {
+      if (productID === null) {
         resolve({
           status: "ERROR",
-          message: "The user is not defined",
+          message: "The productID is not defined",
         });
       } else {
         resolve({
@@ -42,19 +42,18 @@ const getDetailsUser = (id) => {
     }
   });
 };
-
 //dang ký
-const createUser = async (newUser) => {
+const createUser = (newUser) => {
   return new Promise(async (resolve, reject) => {
     const { name, email, password, confirmPassword, phone } = newUser;
     try {
       const checkUser = await User.findOne({
-        email,
+        email: email,
       });
       if (checkUser !== null) {
         resolve({
-          status: "OK",
-          message: "The email is all ready",
+          status: "ERR",
+          message: "The email is already",
         });
       }
       const hash = bcrypt.hashSync(password, 10);
@@ -64,15 +63,15 @@ const createUser = async (newUser) => {
         password: hash,
         phone,
       });
-      if (createUser) {
+      if (createdUser) {
         resolve({
           status: "OK",
-          message: "Success",
+          message: "SUCCESS",
           data: createdUser,
         });
       }
-    } catch (error) {
-      reject(error);
+    } catch (e) {
+      reject(e);
     }
   });
 };
@@ -86,7 +85,7 @@ const loginUser = async (userLogin) => {
       });
       if (checkUser === null) {
         resolve({
-          status: "OK",
+          status: "ERR",
           message: "The user is not define",
         });
       }
@@ -94,7 +93,7 @@ const loginUser = async (userLogin) => {
       const comparePassword = bcrypt.compareSync(password, checkUser.password);
       if (!comparePassword) {
         resolve({
-          status: "OK",
+          status: "ERR",
           message: "The password or user is incorrect",
         });
       }
@@ -167,7 +166,7 @@ module.exports = {
   deleteUser,
   createUser,
   getAllUser,
-  getDetailsUser,
+  getDetailsProduct,
   loginUser,
   updateUser,
 };
