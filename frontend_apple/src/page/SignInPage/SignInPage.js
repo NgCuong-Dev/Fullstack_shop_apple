@@ -31,9 +31,13 @@ const SignInPage = () => {
 
   const mutation = useMutationHooks(async (data) => {
     const res = await UserService.loginUser(data);
-    dispatch(login(res.checkUser));
-    message.success("Đăng nhập thành công");
-    navigate("/");
+    if (res.checkUser) {
+      dispatch(login(res.checkUser));
+      message.success("Đăng nhập thành công");
+      navigate("/");
+    } else {
+      message.error("Đăng nhập thất bại");
+    }
   });
 
   const { data, isLoading } = mutation;

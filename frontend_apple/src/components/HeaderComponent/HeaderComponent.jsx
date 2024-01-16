@@ -37,15 +37,17 @@ const HeaderComponent = () => {
     <div>
       <WrapperHeader>
         <Col span={5}>
-          <img
-            width={80}
-            style={{ objectFit: "cover" }}
-            height={50}
-            src={tiki}
-            alt="#"
-          />
+          <div onClick={() => navigate("/")}>
+            <img
+              width={80}
+              style={{ objectFit: "cover" }}
+              height={50}
+              src={tiki}
+              alt="#"
+            />
+          </div>
         </Col>
-        <Col span={13} style={{ paddingTop: "5px", marginTop: "10px" }}>
+        <Col span={10} style={{ paddingTop: "5px", marginTop: "10px" }}>
           <ButtonInputSearch
             size="large"
             textButton="Tìm Kiếm"
@@ -53,7 +55,7 @@ const HeaderComponent = () => {
           />
         </Col>
         <Col
-          span={6}
+          span={9}
           style={{ display: "flex", gap: "54px", marginTop: "4px" }}
         >
           <WrapperHeaderAccount gutter={16}>
