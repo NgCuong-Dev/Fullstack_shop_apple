@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleNameProduct,
   WrapperCardStyle,
-  WrapperDiscountText,
   WrapperImagesStyle,
   WrapperPriceText,
-  WrapperReportText,
-  WrapperStyleTextSell,
 } from "./style";
 import logo from "../../assets/images/kiemduyet.png";
-import { StarFilled } from "@ant-design/icons";
-// const { Meta } = Card;
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../redux/cartSlice";
+import * as message from "../../components/Message/Message";
 
-const CardComponent = () => {
+const CardComponent = ({ data }) => {
+  const dispatch = useDispatch();
+
+  const [listIdCart, setListIdCart] = useState([]);
+  const cart = useSelector((state) => state.cart.cart);
+  const handleAddToCart = () => {
+    dispatch(addToCart({ info: data, amount: 1 }));
+    message.success("Thêm giỏ hàng thành công");
+  };
+
+  useEffect(() => {
+    const listId = cart?.map((e) => e?.info?._id);
+    setListIdCart(listId);
+  }, [cart]);
+
   return (
     <div>
       <WrapperCardStyle
@@ -22,38 +34,10 @@ const CardComponent = () => {
         style={{
           width: 200,
         }}
-        cover={
-          <img
-            alt="example"
-            src="https://salt.tikicdn.com/cache/750x750/ts/product/a2/38/6c/ce008c63f4ac771550439da44f5f8ee8.png.webp"
-          />
-        }
+        cover={<img alt="example" src={data?.image} />}
       >
         <WrapperImagesStyle preview={false} src={logo} alt="#" />
-        <StyleNameProduct>Iphone 13 128GB</StyleNameProduct>
-        <WrapperReportText style={{ margin: "flex", justifyContent: "center" }}>
-          <span>
-            <span>
-              4.96{" "}
-              <StarFilled
-                style={{ fontSize: "10px", color: "rgb(253,216,54)" }}
-              />
-              <StarFilled
-                style={{ fontSize: "10px", color: "rgb(253,216,54)" }}
-              />
-              <StarFilled
-                style={{ fontSize: "10px", color: "rgb(253,216,54)" }}
-              />
-              <StarFilled
-                style={{ fontSize: "10px", color: "rgb(253,216,54)" }}
-              />
-              <StarFilled
-                style={{ fontSize: "10px", color: "rgb(253,216,54)" }}
-              />
-            </span>
-          </span>
-          <WrapperStyleTextSell>|Đã bán 1000</WrapperStyleTextSell>
-        </WrapperReportText>
+        <StyleNameProduct>{data?.name}</StyleNameProduct>
         <WrapperPriceText
           style={{
             display: "flex",
@@ -61,24 +45,39 @@ const CardComponent = () => {
             paddingTop: "3px",
           }}
         >
-          <span style={{ marginRight: "8px" }}>30.000.000đ</span>
-          <WrapperDiscountText
-            style={{ paddingTop: "4px", paddingLeft: "5px" }}
-          >
-            -5%
-          </WrapperDiscountText>
+          <span style={{ marginRight: "8px" }}>
+            {data?.price.toLocaleString("it-IT", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </span>
         </WrapperPriceText>
-        <button
-          style={{
-            width: "100%",
-            height: "35px",
-            background: "red",
-            borderRadius: "10px",
-            color: "white",
-          }}
-        >
-          Mua ngay
-        </button>
+        {listIdCart?.includes(data?._id) ? (
+          <button
+            style={{
+              width: "100%",
+              height: "35px",
+              background: "green",
+              borderRadius: "10px",
+              color: "white",
+            }}
+          >
+            Đã có trong giỏ hàng
+          </button>
+        ) : (
+          <button
+            style={{
+              width: "100%",
+              height: "35px",
+              background: "red",
+              borderRadius: "10px",
+              color: "white",
+            }}
+            onClick={handleAddToCart}
+          >
+            Thêm giỏ hàng
+          </button>
+        )}
       </WrapperCardStyle>
     </div>
   );

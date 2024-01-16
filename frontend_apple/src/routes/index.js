@@ -1,4 +1,5 @@
 import HomePage from "../page/HomePage/HomePage";
+import CartPage from "../page/CartPage/CartPage";
 import NotFoundPage from "../page/NotFoundPage/NotFoundPage.jsx";
 import OderPage from "../page/OrderPage/OderPage";
 import ProductPage from "../page/ProductPage/ProductPage";
@@ -16,6 +17,11 @@ const routes = [
   {
     path: "/product",
     page: ProductPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/cart",
+    page: CartPage,
     isShowHeader: true,
   },
   {

@@ -8,7 +8,7 @@ import {
 import InputForm from "../../components/InputForm/InputForm";
 // import { useMutation } from "@tanstack/react-query";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
-import { Col, Row } from "antd";
+import { Col, Row, Typography } from "antd";
 import animateLogin from "../../assets/animate_pig.json";
 import Lottie from "lottie-react";
 import background_register from "../../assets/images/background_register.jpg";
@@ -19,17 +19,23 @@ import { useMutationHooks } from "../../hooks/useMultationHook";
 import { useDispatch } from "react-redux";
 import * as message from "../../components/Message/Message";
 import { jwtDecode } from "jwt-decode";
-import { updateUser } from "../../redux/slides/userSlide";
-// import Loading from "../../components/LoadingComponent/Loading";
+import { login } from "../../redux/userSlice";
+import { Box, Button } from "@mui/material";
+import Loading from "../../components/LoadingComponent/Loading";
 const SignInPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const mutation = useMutationHooks((data) => UserService.loginUser(data));
-  console.log(mutation);
-  const dispatch = useDispatch();
+  const mutation = useMutationHooks(async (data) => {
+    const res = await UserService.loginUser(data);
+    dispatch(login(res.checkUser));
+    message.success("Đăng nhập thành công");
+    navigate("/");
+  });
+
   const { data, isLoading } = mutation;
   const handleNavigateSignUp = () => {
     navigate("/sign-up");
@@ -41,33 +47,17 @@ const SignInPage = () => {
   const handleOnchangePassword = (value) => {
     setPassword(value);
   };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    handleSignIn();
+  };
+
   const handleSignIn = () => {
     mutation.mutate({
       email,
       password,
     });
-    console.log("sign in", email, password);
-  };
-  useEffect(() => {
-    if (data?.status === "OK") {
-      message.success("Login Successfull!");
-      // handleNavigateHome();
-      localStorage.setItem("access_token", data?.access_token);
-      window.location.href = "/";
-      if (data?.access_token) {
-        const decoded = jwtDecode(data?.access_token);
-        console.log("decode", decoded);
-        if (decoded?.id) {
-          handleGetDetailsUser(decoded?.id, data?.access_token);
-        }
-      }
-    } else if (data?.status === "ERR") {
-      message.error("Login Failed!");
-    }
-  }, [data]);
-  const handleGetDetailsUser = async (id, token) => {
-    const res = await UserService.getDetailsUser(id, token);
-    dispatch(updateUser({ ...res?.data, access_token: token }));
   };
 
   return (
@@ -121,68 +111,64 @@ const SignInPage = () => {
               <WrapperContainerRight className="space-y-5">
                 <WrapperTextHello>Login Account</WrapperTextHello>
                 <p>Đăng nhập và tạo tài khoản</p>
-                <InputForm
-                  placeholder="abc@gmail.com"
-                  style={{ marginBottom: "20px" }}
-                  value={email}
-                  onChange={handleOnchangeEmail}
-                />
-                <div style={{ position: "relative" }}>
-                  <span
-                    onClick={() => setIsShowPassword(!isShowPassword)}
+                <Box component={"form"} onSubmit={handleLogin}>
+                  <InputForm
+                    placeholder="abc@gmail.com"
+                    style={{ marginBottom: "20px" }}
+                    value={email}
+                    onChange={handleOnchangeEmail}
+                  />
+                  <div style={{ position: "relative" }}>
+                    <span
+                      onClick={() => setIsShowPassword(!isShowPassword)}
+                      style={{
+                        zIndex: 10,
+                        position: "absolute",
+                        top: "4px",
+                        right: "8px",
+                      }}
+                    >
+                      {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
+                    </span>
+                    <InputForm
+                      value={password}
+                      onChange={handleOnchangePassword}
+                      placeholder="password"
+                      type={isShowPassword ? "text" : "password"}
+                    />
+                  </div>
+                  <div
                     style={{
-                      zIndex: 10,
-                      position: "absolute",
-                      top: "4px",
-                      right: "8px",
+                      // display: "flex",
+                      justifyContent: "center",
+                      paddingBottom: "10px",
                     }}
                   >
-                    {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
-                  </span>
-                  <InputForm
-                    value={password}
-                    onChange={handleOnchangePassword}
-                    placeholder="password"
-                    type={isShowPassword ? "text" : "password"}
-                  />
-                </div>
-                <div
-                  style={{
-                    // display: "flex",
-                    justifyContent: "center",
-                    paddingBottom: "10px",
-                  }}
-                >
-                  <div>
-                    {data?.status === "ERR" && (
-                      <span style={{ color: "red" }}>{data?.message}</span>
+                    <div>
+                      {data?.status === "ERR" && (
+                        <span style={{ color: "red" }}>{data?.message}</span>
+                      )}
+                    </div>
+                    <br />
+                    {isLoading ? (
+                      <Box mt={2} display={"flex"} justifyContent={"center"}>
+                        <Loading />
+                      </Box>
+                    ) : (
+                      <div>
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          sx={{ color: "white !important", fontSize: 14 }}
+                          type="submit"
+                        >
+                          Đăng nhập
+                        </Button>
+                      </div>
                     )}
                   </div>
-                  <br />
-                  {/* <Loading></Loading> */}
-                  <div>
-                    <ButtonComponent
-                      onClick={handleSignIn}
-                      disabled={!email.length || !password.length}
-                      size={20}
-                      styleButton={{
-                        marginTop: "10px",
-                        background: "#318CE7",
-                        height: "48px",
-                        border: "none",
-                        borderRadius: "4px",
-                        padding: "10px 20px",
-                        width: "100%",
-                      }}
-                      styleTextButton={{
-                        color: "white",
-                        fontSize: "20px",
-                        fontWeight: "600",
-                      }}
-                      textButton={"Đăng Nhập"}
-                    ></ButtonComponent>
-                  </div>
-                </div>
+                </Box>
+
                 <p>
                   <WrapperTextLight>Quên mật khẩu?</WrapperTextLight>
                 </p>

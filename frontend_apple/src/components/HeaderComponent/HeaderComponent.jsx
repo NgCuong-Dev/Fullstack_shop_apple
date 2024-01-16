@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Col } from "antd";
+import { Badge, Col, Button, Typography } from "antd";
 import {
   WrapperHeader,
   // WrapperTextHeader,
@@ -14,17 +14,25 @@ import {
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import tiki from "../../assets/images/logo_tiki.png";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/userSlice";
+import * as message from "../../components/Message/Message";
 
 const HeaderComponent = () => {
   const navigate = useNavigate();
-  const user = useSelector((state) => {
-    return state.user;
-  });
-  console.log("user", user);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  const cart = useSelector((state) => state.cart.cart);
+
   const handleNavigateLogin = () => {
     navigate("/sign-in");
   };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    message.success("Đăng xuất thành công");
+  };
+
   return (
     <div>
       <WrapperHeader>
@@ -50,20 +58,31 @@ const HeaderComponent = () => {
         >
           <WrapperHeaderAccount gutter={16}>
             <UserOutlined style={{ fontSize: "30px" }} />
-            <div onClick={handleNavigateLogin} style={{ cursor: "pointer" }}>
-              <WrapperTextHeaderSmall
-                style={{ fontSize: "12px", color: "black" }}
-              >
-                Đăng Nhập/Đăng Ký
-              </WrapperTextHeaderSmall>
-              <div>
-                <span style={{ fontSize: "12px" }}>Tài Khoản</span>
-                <CaretDownOutlined />
-              </div>
+            <div style={{ cursor: "pointer" }}>
+              {user?.email ? (
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "2px" }}
+                >
+                  <Typography>{user?.email}</Typography>
+                  <Button onClick={handleLogout}>Đăng xuất</Button>
+                </div>
+              ) : (
+                <div onClick={handleNavigateLogin}>
+                  <WrapperTextHeaderSmall
+                    style={{ fontSize: "12px", color: "black" }}
+                  >
+                    Đăng Nhập/Đăng Ký
+                  </WrapperTextHeaderSmall>
+                  <div>
+                    <span style={{ fontSize: "12px" }}>Tài Khoản</span>
+                    <CaretDownOutlined />
+                  </div>
+                </div>
+              )}
             </div>
           </WrapperHeaderAccount>
-          <div className="pt-6 ml-4">
-            <Badge count={4} size="small">
+          <div className="pt-6 ml-4" onClick={() => navigate("/cart")}>
+            <Badge count={cart ? cart?.length : 0} size="small">
               <ShoppingCartOutlined
                 style={{ fontSize: "30px", color: "#000000" }}
               />

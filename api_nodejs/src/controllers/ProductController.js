@@ -21,10 +21,8 @@ const getAllProduct = async (req, res) => {
 //tao san pham
 const createProduct = async (req, res) => {
   try {
-    console.log(req.body);
-    const { name, image, type, price, countInStock, rating, description } =
-      req.body;
-    if (!name || !image || !type || !price || !countInStock || !rating) {
+    const { name, image, price, countInStock, rating } = req.body;
+    if (!name || !image || !price || !countInStock || !rating) {
       return res.status(200).json({
         status: "error",
         message: "The input is required",

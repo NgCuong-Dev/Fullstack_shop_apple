@@ -107,11 +107,13 @@ const loginUser = async (userLogin) => {
         id: checkUser._id,
         isAdmin: checkUser.isAdmin,
       });
+
       resolve({
         status: "OK",
         message: "Success",
         access_token,
         refresh_token,
+        checkUser,
       });
     } catch (error) {
       reject(error);
